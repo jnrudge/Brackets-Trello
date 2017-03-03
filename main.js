@@ -60,6 +60,8 @@ define(function (require, exports, module) {
 	var trelloCommentCards = {};
 	var cache = {};
 
+	var toolbarPx = 30;
+	
 	// Extension Info.
 	var _ExtensionID		= 'brackets-trello',
 		_ExtensionLabel		= 'Brackets Trello',
@@ -1172,6 +1174,7 @@ define(function (require, exports, module) {
 
 			$(document).on('mousemove', function(e) {
 				$panel.width(width - (e.pageX - pageX));
+				$(".content").css("right", ($("#brackets-trello").width() || 0) + toolbarPx + "px");
 			}).on('mouseup', function() {
 				$(document).off('mousemove').off('mouseup');
 				_savePrefs('width', $panel.width());
@@ -2234,10 +2237,10 @@ define(function (require, exports, module) {
 			realVisibility = true;
 			$panel = $(Mustache.renderTemplate(mainPanel)).width(_prefs.get('width'));
 			_panelEventController($panel);
-			$('#editor-holder').append($panel);
+			$('.main-view').append($panel);
 			CommandManager.get(_ExtensionID).setChecked(true);
 			$icon.addClass('active');
-
+			$(".content").css("right", ($("#brackets-trello").width()) + toolbarPx + "px");
 			if (_prefs.get('selected-board')) {
 				_displayLists();
 			} else {
@@ -2247,11 +2250,13 @@ define(function (require, exports, module) {
 		} else if (!isVisible && realVisibility) {
 			CommandManager.get(_ExtensionID).setChecked(true);
 			$panel.show();
+			$(".content").css("right", ($("#brackets-trello").width()) + toolbarPx + "px");
 			$icon.addClass('active');
 			_initAutoSync(true);
 		} else {
 			CommandManager.get(_ExtensionID).setChecked(false);
 			$panel.hide();
+			$('.content').css('right', '30px');
 			$icon.removeClass('active');
 			_initAutoSync(false);
 		}
